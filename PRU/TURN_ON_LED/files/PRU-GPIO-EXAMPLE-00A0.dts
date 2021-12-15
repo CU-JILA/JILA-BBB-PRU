@@ -1,0 +1,52 @@
+// This DTS overlay sets up one input pin for use by  
+// PRU0 via its Enhanced GPIO mode, which will let us access the pin 
+// by writing to R30 bit 15  
+   
+ 
+ /dts-v1/;  
+ /plugin/;  
+ 
+ / {  
+   // This determines which boards can use this DTS overlay  
+   compatible = "ti,beaglebone", "ti,beaglebone-green", "ti,beaglebone-black";  
+
+   part-number = "PRU-GPIO-EXAMPLE";  
+   
+   version = "00A0";
+   
+   // List the pins and resources we'll be using. This table:  
+   // http://elinux.org/Ti_AM33XX_PRUSSv2#Beaglebone_PRU_connections_and_modes  
+   // shows which pins can be used with PRU0 and PRU1 for input and output via   
+   exclusive-use =  
+      "P8.11", "P8.16", "pru0";  
+   
+   fragment@0 {  
+    target = <&am33xx_pinmux>;  
+    __overlay__ {  
+      example_pins: pinmux_pru_pru_pins {  
+   
+       // The offset and mode for pin P8_11 also come from the table linked above.
+       //  
+       // That table gives offset 0x34 for P8_11.
+       // It also shows us we want pinmux mode 6 for P8_11 in output mode,  
+       // Table 9-60 in the TRM: http://www.ti.com/lit/ug/spruh73l/spruh73l.pdf  
+       // helps us calculate the rest of the configuration value.  
+       //  
+       // For P8_11, the other fields are all 0, so the value is just 0x06.  
+       pinctrl-single,pins = <  
+         0x34 0x06  
+       >;  
+      };  
+    };  
+   };  
+   
+   // This enables the PRU and assigns the GPIO pins to it for use in EGP mode.  
+   fragment@1 {  
+    target = <&pruss>;  
+    __overlay__ {  
+      status = "okay";  
+      pinctrl-names = "default";  
+      pinctrl-0 = <&example_pins>;  
+    };  
+   };  
+ };  
