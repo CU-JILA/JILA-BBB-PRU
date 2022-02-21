@@ -115,5 +115,5 @@ $ sudo apt-get install
 	"prussdrv_open() failed with -1" during the execution
 
  	$ cd /opt/scripts/tools
-	$ ./update_kernel.sh --bone-rt=kernel --lts-4_1   
+	$ ./update_kernel.sh --bone-rt-kernel --lts-4_1   
 
