@@ -1,2 +1,2 @@
-# JILA-BBB-Yocto
-Yocot for Beaglebone Black
+# JILA-BBB-PRU
+
